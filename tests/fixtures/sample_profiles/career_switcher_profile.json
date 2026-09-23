@@ -1,0 +1,59 @@
+{
+  "github_username": "marisol-vega",
+  "portfolio_url": "https://marisolvega.dev",
+  "resume_filename": "mid_career.md",
+  "repos": [
+    {
+      "name": "clinic-noshow-model",
+      "description": "Gradient boosting model predicting clinic appointment no-shows",
+      "language": "Python",
+      "stargazers_count": 18,
+      "forks_count": 3,
+      "open_issues_count": 2,
+      "pushed_at": "2026-08-14T13:22:47Z",
+      "html_url": "https://github.com/marisol-vega/clinic-noshow-model",
+      "homepage": "",
+      "topics": ["machine-learning", "xgboost", "healthcare"],
+      "readme_content": "# clinic-noshow-model\n\nGradient boosting model predicting clinic appointment no-shows from scheduling data.\n\n## Data\n\nUses a de-identified appointment export. See `data/README.md` for the schema.\n\n## Training\n\n    python train.py --config configs/baseline.yaml\n\n## Results\n\nBaseline AUC 0.71 on a held-out month.\n"
+    },
+    {
+      "name": "shift-swap",
+      "description": null,
+      "language": "TypeScript",
+      "stargazers_count": 4,
+      "forks_count": 1,
+      "open_issues_count": 0,
+      "pushed_at": "2026-04-30T17:55:12Z",
+      "html_url": "https://github.com/marisol-vega/shift-swap",
+      "homepage": "",
+      "topics": ["react"],
+      "readme_content": null
+    },
+    {
+      "name": "pandas-notes",
+      "description": "Worked examples from a data analysis bootcamp",
+      "language": "Jupyter Notebook",
+      "stargazers_count": 7,
+      "forks_count": 0,
+      "open_issues_count": 0,
+      "pushed_at": "2026-02-11T09:10:00Z",
+      "html_url": "https://github.com/marisol-vega/pandas-notes",
+      "homepage": "",
+      "topics": ["pandas", "notebooks"],
+      "readme_content": "# pandas-notes\n\nWorked examples from a data analysis bootcamp, mostly pandas and matplotlib.\n"
+    },
+    {
+      "name": "triage-dashboard",
+      "description": "Streamlit dashboard summarising emergency department wait times",
+      "language": "Python",
+      "stargazers_count": 12,
+      "forks_count": 2,
+      "open_issues_count": 1,
+      "pushed_at": "2026-07-21T11:03:29Z",
+      "html_url": "https://github.com/marisol-vega/triage-dashboard",
+      "homepage": "https://triage.marisolvega.dev",
+      "topics": ["streamlit", "visualization", "healthcare"],
+      "readme_content": "# triage-dashboard\n\nStreamlit dashboard summarising emergency department wait times by hour and acuity.\n\n## Setup\n\n    pip install -r requirements.txt\n\n## Usage\n\nRun `streamlit run app.py` and pick a date range in the sidebar.\n"
+    }
+  ]
+}

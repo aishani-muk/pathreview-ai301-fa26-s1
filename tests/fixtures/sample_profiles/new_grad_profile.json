@@ -1,0 +1,46 @@
+{
+  "github_username": "dev-okonkwo",
+  "portfolio_url": "https://dev-okonkwo.github.io",
+  "resume_filename": "new_grad.md",
+  "repos": [
+    {
+      "name": "study-planner",
+      "description": "Course scheduling tool built for a senior capstone",
+      "language": "Python",
+      "stargazers_count": 2,
+      "forks_count": 0,
+      "open_issues_count": 1,
+      "pushed_at": "2026-06-02T10:15:33Z",
+      "html_url": "https://github.com/dev-okonkwo/study-planner",
+      "homepage": "",
+      "topics": ["flask", "sqlite", "capstone"],
+      "readme_content": "# study-planner\n\nCourse scheduling tool built for a senior capstone.\n\n## Setup\n\n    pip install -r requirements.txt\n\n## Usage\n\nRun `flask --app planner run` and open http://localhost:5000.\n"
+    },
+    {
+      "name": "weather-cli",
+      "description": "Command line weather lookup following a tutorial",
+      "language": "Python",
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "open_issues_count": 0,
+      "pushed_at": "2026-03-18T21:40:05Z",
+      "html_url": "https://github.com/dev-okonkwo/weather-cli",
+      "homepage": "",
+      "topics": ["tutorial"],
+      "readme_content": ""
+    },
+    {
+      "name": "portfolio-site",
+      "description": "Personal portfolio built with plain HTML and CSS",
+      "language": "HTML",
+      "stargazers_count": 1,
+      "forks_count": 0,
+      "open_issues_count": 0,
+      "pushed_at": "2026-01-07T08:02:11Z",
+      "html_url": "https://github.com/dev-okonkwo/portfolio-site",
+      "homepage": "https://dev-okonkwo.github.io",
+      "topics": ["html", "css"],
+      "readme_content": "# portfolio-site\n\nPersonal portfolio built with plain HTML and CSS.\n"
+    }
+  ]
+}

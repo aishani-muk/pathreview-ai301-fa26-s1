@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "case_id": "mid_career_backend_depth",
+      "profile": "basic_profile.json",
+      "query": "Python backend API projects with documentation",
+      "reference_feedback": "The transit-delay-tracker repository is a Python project that predicts bus arrival delays from live GTFS feeds. Its README documents both installation and how to run the API with uvicorn, which is stronger than most portfolio repositories. The portfolio would be stronger if that README also described the API endpoints it exposes."
+    },
+    {
+      "case_id": "mid_career_frontend_breadth",
+      "profile": "basic_profile.json",
+      "query": "TypeScript React frontend project quality and documentation",
+      "reference_feedback": "The recipe-scaler repository is a TypeScript React app that rescales recipe quantities and converts between metric and imperial units. Its README is a single description line with no setup or usage section. Adding installation and usage instructions would bring it up to the standard set by transit-delay-tracker."
+    },
+    {
+      "case_id": "new_grad_strongest_project",
+      "profile": "new_grad_profile.json",
+      "query": "Python Flask project with setup and usage instructions",
+      "reference_feedback": "The study-planner repository is a Python course scheduling tool built for a senior capstone. Its README documents installation with pip and how to start the Flask app on localhost. This is the strongest project in the portfolio and belongs at the top of the profile."
+    },
+    {
+      "case_id": "new_grad_thin_evidence",
+      "profile": "new_grad_profile.json",
+      "query": "command line tool documentation and originality",
+      "reference_feedback": "The weather-cli repository is a command line weather lookup described as following a tutorial. It has no README content at all, so a reviewer cannot tell what the tool does or how to run it. Writing even a short README, and saying what was changed from the tutorial, would make this repository count for something."
+    },
+    {
+      "case_id": "switcher_ml_depth",
+      "profile": "career_switcher_profile.json",
+      "query": "machine learning model training and reported results",
+      "reference_feedback": "The clinic-noshow-model repository is a gradient boosting model predicting clinic appointment no-shows from scheduling data. Its README documents the training command and reports a baseline AUC of 0.71 on a held-out month. Reporting a concrete metric on held-out data is unusual in a portfolio and is worth highlighting."
+    },
+    {
+      "case_id": "switcher_undocumented_repo",
+      "profile": "career_switcher_profile.json",
+      "query": "TypeScript React scheduling project description",
+      "reference_feedback": "The shift-swap repository is a TypeScript project tagged react with no description and no README content. A reader has no way to tell what the project does or whether it is finished. Either document it or drop it from the portfolio, because an empty repository dilutes the stronger healthcare work."
+    }
+  ]
+}
