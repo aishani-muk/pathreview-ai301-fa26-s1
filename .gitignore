@@ -44,3 +44,8 @@ htmlcov/
 
 # Build artifacts
 *.pyc
+
+# Eval artifacts
+eval_results.json
+.chromadb/
+.benchmarks/
