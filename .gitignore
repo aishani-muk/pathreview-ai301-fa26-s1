@@ -47,5 +47,3 @@ htmlcov/
 
 # Eval artifacts
 eval_results.json
-.chromadb/
-.benchmarks/
