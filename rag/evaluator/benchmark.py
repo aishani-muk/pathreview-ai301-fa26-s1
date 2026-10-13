@@ -16,6 +16,7 @@ logger = structlog.get_logger()
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_PROFILES_DIR = REPO_ROOT / "tests" / "fixtures" / "sample_profiles"
 DEFAULT_CASES_PATH = REPO_ROOT / "tests" / "fixtures" / "benchmark" / "benchmark_cases.json"
+REQUIRED_CASE_FIELDS = ("case_id", "profile", "query", "reference_feedback")
 
 
 @dataclass(frozen=True)
@@ -152,12 +153,12 @@ def load_benchmark(
         raise FileNotFoundError(f"benchmark case spec not found: {cases_path}")
     spec = json.loads(cases_path.read_text(encoding="utf-8"))
 
+    # Dict insertion order is the spec order, so no separate ordering list
+    # is needed; each profile is loaded and chunked once on first reference.
     loaded: dict[str, BenchmarkProfile] = {}
-    order: list[str] = []
 
     for raw in spec.get("cases") or []:
-        required = ("case_id", "profile", "query", "reference_feedback")
-        missing = [key for key in required if not raw.get(key)]
+        missing = [key for key in REQUIRED_CASE_FIELDS if not raw.get(key)]
         if missing:
             raise ValueError(f"benchmark case {raw.get('case_id', '?')} is missing: {missing}")
 
@@ -170,7 +171,6 @@ def load_benchmark(
                 chunks=profile_to_chunks(profile),
                 cases=[],
             )
-            order.append(source_file)
 
         entry = loaded[source_file]
         entry.cases.append(
@@ -182,9 +182,10 @@ def load_benchmark(
             )
         )
 
+    profiles = list(loaded.values())
     logger.info(
         "benchmark_loaded",
-        profiles=len(order),
-        cases=sum(len(loaded[f].cases) for f in order),
+        profiles=len(profiles),
+        cases=sum(len(profile.cases) for profile in profiles),
     )
-    return [loaded[f] for f in order]
+    return profiles

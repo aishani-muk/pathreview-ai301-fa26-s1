@@ -100,8 +100,51 @@ class EvalRunner:
         self.min_score = min_score
         self.suite = suite or EvalSuite()
 
+    def index(self, chunks: list[dict]) -> KeywordSearcher | None:
+        """Build a BM25 index over a chunk corpus, once.
+
+        Sanitizing and tokenizing the corpus is the expensive part of
+        retrieval, and every case against the same profile shares it, so
+        callers build the index once per profile and query it per case.
+
+        Args:
+            chunks: The profile's chunk corpus
+
+        Returns:
+            A searcher over the corpus, or None when no chunk has tokens
+        """
+        corpus = sanitize_chunks(chunks)
+        # BM25 divides by the average document length, so a corpus whose
+        # documents all tokenize empty has no average to divide by. A
+        # whitespace-only text tokenizes empty, so strip() is the same
+        # test as split() without allocating a token list per chunk.
+        if not any(chunk["text"].strip() for chunk in corpus):
+            return None
+
+        searcher = KeywordSearcher()
+        searcher.index(corpus)
+        return searcher
+
+    def search(self, searcher: KeywordSearcher | None, query: str) -> list[dict]:
+        """Query a built index and keep the hits above the score floor.
+
+        Args:
+            searcher: The index from ``index``, or None for an empty corpus
+            query: The benchmark query
+
+        Returns:
+            Matching chunks above the score floor, best first
+        """
+        if searcher is None:
+            return []
+        hits = searcher.search(query, top_k=self.top_k)
+        return [hit for hit in hits if hit.get("bm25_score", 0.0) > self.min_score]
+
     def retrieve(self, chunks: list[dict], query: str) -> list[dict]:
-        """Retrieve the chunks BM25 ranks highest for a query.
+        """Index a corpus and retrieve for one query in a single call.
+
+        Convenience for one-off queries; ``run`` indexes each profile once
+        and reuses the searcher across its cases instead.
 
         Args:
             chunks: The profile's chunk corpus
@@ -110,28 +153,28 @@ class EvalRunner:
         Returns:
             Matching chunks above the score floor, best first
         """
-        corpus = sanitize_chunks(chunks)
-        # BM25 divides by the average document length, so a corpus whose
-        # documents all tokenize empty has no average to divide by.
-        if not any(chunk["text"].split() for chunk in corpus):
-            return []
+        return self.search(self.index(chunks), query)
 
-        searcher = KeywordSearcher()
-        searcher.index(corpus)
-        hits = searcher.search(query, top_k=self.top_k)
-        return [hit for hit in hits if hit.get("bm25_score", 0.0) > self.min_score]
-
-    def run_case(self, profile: BenchmarkProfile, case: BenchmarkCase) -> CaseReport:
+    def run_case(
+        self,
+        profile: BenchmarkProfile,
+        case: BenchmarkCase,
+        searcher: KeywordSearcher | None = None,
+    ) -> CaseReport:
         """Score one benchmark case.
 
         Args:
             profile: The profile the case queries
             case: The case to score
+            searcher: A prebuilt index over ``profile.chunks``; built here
+                when omitted, so single-case callers need not manage one
 
         Returns:
             The case's retrieval detail and scores
         """
-        hits = self.retrieve(profile.chunks, case.query)
+        if searcher is None:
+            searcher = self.index(profile.chunks)
+        hits = self.search(searcher, case.query)
         result = self.suite.run(case.query, hits, case.reference_feedback)
 
         return CaseReport(
@@ -159,7 +202,8 @@ class EvalRunner:
         profile_reports: list[ProfileReport] = []
 
         for profile in profiles:
-            scored = [self.run_case(profile, case) for case in profile.cases]
+            searcher = self.index(profile.chunks)
+            scored = [self.run_case(profile, case, searcher) for case in profile.cases]
             case_reports.extend(scored)
             profile_reports.append(
                 ProfileReport(

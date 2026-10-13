@@ -171,6 +171,45 @@ class TestEvalRunner:
             assert round(case.faithfulness_score, 4) == case.faithfulness_score
             assert round(case.overall_score, 4) == case.overall_score
 
+    def test_index_returns_none_for_tokenless_corpus(self, runner):
+        assert runner.index([]) is None
+        assert runner.index([_chunk("a", ""), _chunk("b", "   ")]) is None
+
+    def test_search_with_no_index_returns_empty_list(self, runner):
+        assert runner.search(None, "python") == []
+
+    def test_retrieve_matches_index_then_search(self, runner):
+        corpus = [*_filler(), _chunk("match", "python fastapi backend service")]
+        two_step = runner.search(runner.index(corpus), "python fastapi")
+        assert runner.retrieve(corpus, "python fastapi") == two_step
+
+    def test_run_indexes_each_profile_once(self):
+        """Every case against a profile shares one index build."""
+
+        class CountingRunner(EvalRunner):
+            def __init__(self):
+                super().__init__()
+                self.index_calls = 0
+
+            def index(self, chunks):
+                self.index_calls += 1
+                return super().index(chunks)
+
+        chunks = [*_filler(), _chunk("a", "python fastapi backend service")]
+        cases = [
+            BenchmarkCase(f"case-{i}", "dev", "python fastapi", "Builds Python services.")
+            for i in range(3)
+        ]
+        profile = BenchmarkProfile(
+            profile_id="dev", source_file="dev.json", chunks=chunks, cases=cases
+        )
+
+        runner = CountingRunner()
+        report = runner.run([profile])
+
+        assert report.summary["cases"] == 3
+        assert runner.index_calls == 1
+
     def test_run_benchmark_over_the_checked_in_fixtures(self):
         report = run_benchmark()
 
